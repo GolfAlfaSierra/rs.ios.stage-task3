@@ -30,46 +30,26 @@
 #pragma mark - Third
 
 - (NSString *)getDayName:(NSDate*) date {
-    if (date == nil) {
-        return nil;
-    };
-    
-    NSInteger TIME_OFFSET = 3600 * 3;
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ru_RU"];
-    
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setLocale:locale];
-    [df setTimeZone: [NSTimeZone timeZoneForSecondsFromGMT:TIME_OFFSET]];
-    
-    NSArray *weekDayNemes = [df shortWeekdaySymbols];
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    [calendar setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:TIME_OFFSET]];
-    [calendar setFirstWeekday:2];
-    
-    NSDateComponents *comp = [calendar components:NSCalendarUnitWeekdayOrdinal
-                                         fromDate:date];
-    NSInteger weekNum = [comp weekdayOrdinal];
-    
-    NSString *result = weekDayNemes[weekNum];
-    
-    return result;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"EE";
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"];
+    return [dateFormatter stringFromDate:date];
 }
 
 #pragma mark - Fourth
 
 - (BOOL)isDateInThisWeek:(NSDate *)date {
     
-    NSDate *begin =  [self beginingOfWeekOfDate];
-    NSDate *end = [self endOfWeekFromDate];
+    NSDate *begin = [self beginingOfWeekOfDate];
+    NSDate *end   = [self endOfWeekFromDate];
     
-    double starBoundTimeStamp = [begin timeIntervalSince1970];
+    double startBoundTimeStamp = [begin timeIntervalSince1970];
     double endBoundTimeStamp = [end timeIntervalSince1970];
     double dateTimeStamp = [date timeIntervalSince1970];
     
     BOOL result = NO;
     
-    if ((dateTimeStamp >= starBoundTimeStamp) && (dateTimeStamp <= endBoundTimeStamp)) {
+    if ((dateTimeStamp >= startBoundTimeStamp) && (dateTimeStamp <= endBoundTimeStamp)) {
         result = YES;
     }
     
